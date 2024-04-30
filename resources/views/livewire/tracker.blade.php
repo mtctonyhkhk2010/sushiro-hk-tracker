@@ -2,7 +2,7 @@
     <div class="text-xl text-center">
         壽記追蹤器
         <br>
-        <livewire:current-time></livewire:current-time>
+        <span class="text-xs">更新時間: {{ now()->toDateTimeString() }}</span>
     </div>
     @foreach($store_region as $region => $stores)
         <x-header class="mb-3 mt-3" :size="'text-xl'">
@@ -21,7 +21,7 @@
 @script
 <script>
     document.addEventListener("visibilitychange", () => {
-        if(document.visibilityState === "visible") $wire.$refresh()
+        if(document.visibilityState === "visible") $wire.$refresh();
     });
 </script>
 @endscript
