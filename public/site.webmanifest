@@ -1,6 +1,7 @@
 {
    "name":"壽記追蹤器",
    "short_name":"壽記追蹤器",
+   "start_url":"https://sushiro-hk-tracker.gosa.app/",
    "icons":[
       {
          "src":"/android-chrome-192x192.png",
