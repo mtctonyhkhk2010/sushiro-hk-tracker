@@ -15,7 +15,7 @@
     <x-main full-width>
 
         {{-- The `$slot` goes here --}}
-        <x-slot:content>
+        <x-slot:content class="!p-3">
             {{ $slot }}
         </x-slot:content>
     </x-main>

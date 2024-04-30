@@ -18,11 +18,11 @@ class StoreSeeder extends Seeder
         foreach ($stores as $store)
         {
             Store::create([
+                'sushiro_store_id' => $store['id'],
                 'name' => $store['name'],
                 'address' => $store['address'],
                 'region' => $store['region'],
                 'status' => $store['storeStatus'],
-                'net_ticket_status' => $store['netTicketStatus'],
                 'location' => new Point($store['latitude'], $store['longitude']),
             ]);
         }

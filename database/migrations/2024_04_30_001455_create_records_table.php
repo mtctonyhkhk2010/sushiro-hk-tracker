@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
-            $table->dateTime('time');
-            $table->integer('wait_group');
-            $table->integer('wait_time');
+            $table->integer('wait_group');//waitingGroup
+            $table->integer('wait_time');//wait
         });
     }
 

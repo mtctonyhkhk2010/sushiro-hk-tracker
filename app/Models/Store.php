@@ -22,7 +22,8 @@ class Store extends Model
 
     protected $casts = [
         'location' => Point::class,
-        'status' => StoreStatus::class
+        'status' => StoreStatus::class,
+        'store_queue' => 'array',
     ];
 
 }

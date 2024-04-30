@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->integer('sushiro_store_id');
             $table->json('name');
             $table->string('status');
             $table->string('address');
             $table->string('region');
-            $table->string('net_ticket_status');
             $table->geometry('location', subtype: 'point');
+            $table->json('store_queue')->nullable();
+            $table->integer('wait_group')->nullable();//waitingGroup
+            $table->integer('wait_time')->nullable();//wait
         });
     }
 
