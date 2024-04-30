@@ -44,25 +44,27 @@ class getStoresGroupQueues extends Command
 
             $response = $response->collect();
 
+            $target_store = $store_response->firstWhere('id', $store->sushiro_store_id);
+
             $store->update([
-                'status' => $store_response->firstWhere('id', $store->sushiro_store_id)['storeStatus'],
+                'status' => $target_store['storeStatus'],
                 'store_queue' => $response['storeQueue'],
-                'wait_group'  => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
-                'wait_time'   => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
-                'local_ticketing_status' => $store_response->firstWhere('id', $store->sushiro_store_id)['localTicketingStatus'] === "ON",
+                'wait_group'  => $target_store['waitingGroup'],
+                'wait_time'   => $target_store['wait'],
+                'local_ticketing_status' => $target_store['localTicketingStatus'] === "ON",
             ]);
 
             if (now()->minute % 15 === 0)
             {
                 Record::create([
                     'store_id' => $store->id,
-                    'wait_group' => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
-                    'wait_time' => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
+                    'wait_group' => $target_store['waitingGroup'],
+                    'wait_time' => $target_store['wait'],
                 ]);
             }
 
             //store cutoff and no cutoff record
-            if ($store_response->firstWhere('id', $store->sushiro_store_id)['localTicketingStatus'] === "OFF"
+            if ($target_store['localTicketingStatus'] === "OFF"
                 && !Statistic::where('store_id', $store->id)->where('created_at', 'like', now()->toDateString().'%')->exists())
             {
                 Statistic::create([
