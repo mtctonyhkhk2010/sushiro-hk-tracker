@@ -5,6 +5,9 @@
         </div>
         <div class="text-gray-500 text-sm mt-1">
             @if($store->status === \App\Enums\StoreStatus::Open)
+                @if(!$store->local_ticketing_status)
+                    <x-badge value="停飛" class="badge-secondary" />
+                @endif
                 @if($store->wait_group)
                     {{ $store->wait_group }}組人等緊
                 @else
