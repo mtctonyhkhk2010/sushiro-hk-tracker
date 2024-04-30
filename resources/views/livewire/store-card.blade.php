@@ -3,7 +3,11 @@
         {{ $store->name }}
     </x-slot:title>
     <x-slot:subtitle>
-        {{ $store->wait_group }}組人等緊
+        @if($store->wait_group)
+            {{ $store->wait_group }}組人等緊
+        @else
+            無人等緊
+        @endif
     </x-slot:subtitle>
     @if($store->status === \App\Enums\StoreStatus::Open)
         @forelse($store->store_queue as $number)
