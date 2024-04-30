@@ -1,4 +1,4 @@
-<x-card class="!p-3" shadow separator>
+<x-card wire:poll.60s :title="$store->name" class="!p-3" shadow separator>
     <x-slot:title class="text-base">
         {{ $store->name }}
     </x-slot:title>

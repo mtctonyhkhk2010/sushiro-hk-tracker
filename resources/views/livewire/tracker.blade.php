@@ -1,6 +1,11 @@
 <div>
+    <div class="text-xl text-center">
+        壽記追蹤器
+        <br>
+        <livewire:current-time></livewire:current-time>
+    </div>
     @foreach($store_region as $region => $stores)
-        <x-header class="mb-5 mt-5" :size="'text-2xl'">
+        <x-header class="mb-5 mt-5" :size="'text-xl'">
             <x-slot:title class="text-2xl">
                 {{ $region }}
             </x-slot:title>
