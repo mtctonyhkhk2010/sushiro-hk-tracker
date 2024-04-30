@@ -17,3 +17,11 @@
         </div>
     @endforeach
 </div>
+
+@script
+<script>
+    document.addEventListener("visibilitychange", () => {
+        if(document.visibilityState === "visible") $wire.$refresh()
+    });
+</script>
+@endscript
