@@ -4,10 +4,12 @@
             {{ $store->name }}
         </div>
         <div class="text-gray-500 text-sm mt-1">
-            @if($store->wait_group)
-                {{ $store->wait_group }}組人等緊
-            @else
-                無人等緊
+            @if($store->status === \App\Enums\StoreStatus::Open)
+                @if($store->wait_group)
+                    {{ $store->wait_group }}組人等緊
+                @else
+                    無人等緊
+                @endif
             @endif
         </div>
         <hr class="my-3" />
