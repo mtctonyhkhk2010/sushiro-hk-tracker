@@ -45,6 +45,7 @@ class getStoresGroupQueues extends Command
             $response = $response->collect();
 
             $store->update([
+                'status' => $response['storeStatus'],
                 'store_queue' => $response['storeQueue'],
                 'wait_group'  => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
                 'wait_time'   => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
