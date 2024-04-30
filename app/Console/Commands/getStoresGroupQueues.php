@@ -56,6 +56,16 @@ class getStoresGroupQueues extends Command
                 'wait_group' => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
                 'wait_time' => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
             ]);
+
+            //store cutoff and no cutoff record
+            if ($store_response->firstWhere('id', $store->sushiro_store_id)['localTicketingStatus'] === "OFF"
+                && !Statistic::where('store_id', $store->id)->where('created_at', 'like', now()->toDateString().'%')->exists())
+            {
+                Statistic::create([
+                    'store_id' => $store->id,
+                    'cutoff' => now()
+                ]);
+            }
         }
     }
 }
