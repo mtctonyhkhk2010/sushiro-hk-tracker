@@ -51,11 +51,14 @@ class getStoresGroupQueues extends Command
                 'local_ticketing_status' => $store_response->firstWhere('id', $store->sushiro_store_id)['localTicketingStatus'] === "ON",
             ]);
 
-            Record::create([
-                'store_id' => $store->id,
-                'wait_group' => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
-                'wait_time' => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
-            ]);
+            if (now()->minute % 15 === 0)
+            {
+                Record::create([
+                    'store_id' => $store->id,
+                    'wait_group' => $store_response->firstWhere('id', $store->sushiro_store_id)['waitingGroup'],
+                    'wait_time' => $store_response->firstWhere('id', $store->sushiro_store_id)['wait'],
+                ]);
+            }
 
             //store cutoff and no cutoff record
             if ($store_response->firstWhere('id', $store->sushiro_store_id)['localTicketingStatus'] === "OFF"
