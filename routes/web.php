@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', \App\Livewire\Tracker::class);
+Route::get('/store/{store}', \App\Livewire\ShowStore::class);

@@ -10,6 +10,7 @@ class Tracker extends Component
     public function render()
     {
         $store_region = Store::all()->groupBy('region');
-        return view('livewire.tracker', compact('store_region'));
+        $liked_stores = Store::whereIn('id', session('liked_stores', []))->get();
+        return view('livewire.tracker', compact('store_region', 'liked_stores'));
     }
 }
