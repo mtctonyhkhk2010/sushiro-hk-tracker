@@ -1,4 +1,4 @@
-<div wire:poll.2s>
+<div wire:poll.60s>
     <div class="text-xl text-center">
         壽記追蹤器
         <br>
