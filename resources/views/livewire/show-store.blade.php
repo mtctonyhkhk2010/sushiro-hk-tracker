@@ -53,7 +53,7 @@
             </x-card>
             <x-card title="輪候時間" class="basis-1/2" shadow separator>
                 @if($store->wait_time > 0)
-                    {{ $store->wait_time }} 分鐘
+                    大約 {{ $store->wait_time }} 分鐘
                 @else
                     無人排隊
                 @endif
