@@ -12,7 +12,33 @@ self.addEventListener("push", (event) => {
 });
 
 self.addEventListener("notificationclick",  (event) => {
+    event.waitUntil(clients.matchAll({
+        type: "window",
+        includeUncontrolled: true
+    }).then(function (clientList) {
+        if (event.notification.data.notifURL) {
+            let client = null;
 
-    event.waitUntil(clients.openWindow(event.notification.data.notifURL));
+            for (let i = 0; i < clientList.length; i++) {
+                let item = clientList[i];
+
+                if (item.url) {
+                    client = item;
+                    break;
+                }
+            }
+
+            if (client && 'navigate' in client) {
+                client.focus();
+                event.notification.close();
+                return client.navigate(event.notification.data.notifURL);
+            }
+            else {
+                event.notification.close();
+                // if client doesn't have navigate function, try to open a new browser window
+                return clients.openWindow(event.notification.data.notifURL);
+            }
+        }
+    }));
 
 });
