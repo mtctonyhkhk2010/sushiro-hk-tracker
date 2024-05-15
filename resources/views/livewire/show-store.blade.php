@@ -2,7 +2,7 @@
     <div class="flex">
         <div class="flex-none w-14 h-14 ">
             <button class="btn btn-ghost btn-circle">
-                <x-heroicon-o-arrow-uturn-left wire:navigate href="/"/>
+                <x-heroicon-o-arrow-uturn-left onclick="history.back()"/>
             </button>
         </div>
         <div class="text-xl text-center grow">
