@@ -43,7 +43,7 @@
     </x-card>
 
     @if($store->status === \App\Enums\StoreStatus::Open)
-        <div class="flex gap-3">
+        <div class="flex gap-3 mb-3">
             <x-card title="輪候人數" class="basis-1/2" shadow separator>
                 @if($store->wait_group > 0)
                     {{ $store->wait_group }}
@@ -59,6 +59,26 @@
                 @endif
             </x-card>
         </div>
+
+        <div x-data="notification">
+            @if(isset($this->pushSubscription))
+                <x-alert class="alert-info" icon="o-exclamation-triangle">
+                    當{{ \App\Models\Store::find($this->pushSubscription->store_id)->name }}差唔多叫到{{ $this->pushSubscription->queue_number }}號就會提你
+                    <x-slot:actions>
+                        <x-button class="btn-warning btn-sm" label="按此取消" wire:click="cancelSubscription" />
+                    </x-slot:actions>
+                </x-alert>
+            @else
+                <x-button class="btn-warning btn-sm" label="叫號提醒" @click="$wire.queueModal = true" />
+            @endif
+            <x-modal wire:model="queueModal" title="你張飛幾多號？" subtitle="就到個陣提你">
+                <x-input x-model="queue_number" label="號碼" inline />
+                <x-slot:actions>
+                    <x-button label="取消" @click="$wire.queueModal = false" />
+                    <x-button label="確認" class="btn-primary" x-on:click="requestNotification" />
+                </x-slot:actions>
+            </x-modal>
+        </div>
     @endif
 </div>
 
@@ -67,5 +87,46 @@
     document.addEventListener("visibilitychange", () => {
         if(document.visibilityState === "visible") $wire.$refresh();
     });
+
+    Alpine.data('notification', () => {
+        return {
+            queue_number: null,
+
+            requestNotification() {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+
+                        //get service worker
+                        navigator.serviceWorker.ready.then((sw) => {
+
+                            //subscribe
+                            sw.pushManager.subscribe({
+                                userVisibleOnly: true,
+                                applicationServerKey: "BDTBZSCdaa_airwORtBHlMrKE2HO4QasA1T0ZEONmsrh9qnUVQ7uKCgglVgwLHL46d-J69SscQCr81iNUhsVrMw"
+                            }).then((subscription) => {
+                                //subscription successful
+                                fetch("/api/push-subscribe", {
+                                    method: "post",
+                                    headers: {
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        store_id: @js($store->id),
+                                        queue_number: this.queue_number,
+                                        session_id: @js(session()->getId()),
+                                        data: subscription,
+                                    })
+                                }).then(() => {
+                                    $wire.queueModal = false;
+                                    $wire.$refresh();
+                                });
+                            });
+                        });
+                    }
+                });
+            },
+        }
+    })
 </script>
 @endscript

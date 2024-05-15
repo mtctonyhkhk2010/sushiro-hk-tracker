@@ -35,5 +35,7 @@
     document.addEventListener("visibilitychange", () => {
         if(document.visibilityState === "visible") $wire.$refresh();
     });
+
+    navigator.serviceWorker.register("sw.js");
 </script>
 @endscript

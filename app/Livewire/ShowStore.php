@@ -2,12 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\PushSubscription;
 use App\Models\Store;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class ShowStore extends Component
 {
     public Store $store;
+    public bool $queueModal = false;
 
     public function render()
     {
@@ -28,5 +31,16 @@ class ShowStore extends Component
             return $value !== $this->store->id;
         });
         session(['liked_stores' => $liked_stores]);
+    }
+
+    #[Computed]
+    public function pushSubscription()
+    {
+        return PushSubscription::where('session_id', session()->getId())->where('done', false)->first();
+    }
+
+    public function cancelSubscription()
+    {
+        return PushSubscription::where('session_id', session()->getId())->delete();
     }
 }
