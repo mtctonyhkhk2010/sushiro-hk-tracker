@@ -1,8 +1,8 @@
 <div wire:poll.60s>
     <div class="flex">
         <div class="flex-none w-14 h-14 ">
-            <button class="btn btn-ghost btn-circle">
-                <x-heroicon-o-arrow-uturn-left onclick="history.back()"/>
+            <button class="btn btn-ghost btn-circle" onclick="history.back()">
+                <x-heroicon-o-arrow-uturn-left class="w-5 h-5" />
             </button>
         </div>
         <div class="text-xl text-center grow">
@@ -11,13 +11,15 @@
             <span class="text-xs">更新時間: {{ now()->toDateTimeString() }}</span>
         </div>
         <div class="flex-none w-14 h-14 ">
-            <button class="btn btn-ghost btn-circle">
-                @if(in_array($store->id, session('liked_stores', [])))
-                    <x-heroicon-s-heart wire:click="unlike" />
-                @else
-                    <x-heroicon-o-heart wire:click="like"/>
-                @endif
-            </button>
+            @if(in_array($store->id, session('liked_stores', [])))
+                <button class="btn btn-ghost btn-circle" wire:click="unlike" >
+                    <x-heroicon-s-heart class="w-5 h-5" />
+                </button>
+            @else
+                <button class="btn btn-ghost btn-circle" wire:click="like">
+                    <x-heroicon-o-heart class="w-5 h-5" />
+                </button>
+            @endif
         </div>
     </div>
 
