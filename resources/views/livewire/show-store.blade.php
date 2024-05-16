@@ -1,7 +1,7 @@
 <div wire:poll.60s>
     <div class="flex">
         <div class="flex-none w-14 h-14 ">
-            <button class="btn btn-ghost btn-circle" onclick="history.back()">
+            <button class="btn btn-ghost btn-circle" wire:navigate href="/">
                 <x-heroicon-o-arrow-uturn-left class="w-5 h-5" />
             </button>
         </div>
