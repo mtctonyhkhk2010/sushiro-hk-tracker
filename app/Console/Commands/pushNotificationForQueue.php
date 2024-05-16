@@ -53,7 +53,8 @@ class pushNotificationForQueue extends Command
                     'title' => '就到你!',
                     'body' => '叫到'.$store->store_queue[0].'啦, 快d埋位啦',
                     'url' => config('app.url')."/store/".$push_sub->store_id,
-                ])
+                ]),
+                ['TTL' => 300, 'urgency' => 'normal']
             );
 
             if ($result->isSuccess())
