@@ -100,6 +100,8 @@
             queue_number: null,
 
             requestNotification() {
+                if ( ! Number.isInteger(this.queue_number)) return;
+
                 Notification.requestPermission().then((permission) => {
                     if (permission === 'granted') {
 
