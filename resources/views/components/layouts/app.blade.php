@@ -11,6 +11,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
 
+    <meta property="og:url"                content="{{ config('app.url') }}" />
+    <meta property="og:type"               content="website" />
+    <meta property="og:title"              content="{{ config('app.name') }}" />
+    <meta property="og:description"        content="香港壽記排隊情况" />
+    <meta property="og:image"              content="/photo/queue.jpg" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
