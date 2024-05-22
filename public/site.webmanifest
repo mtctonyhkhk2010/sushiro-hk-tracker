@@ -39,6 +39,27 @@
             "type": "image/png",
             "form_factor": "narrow",
             "label": "叫號提醒"
+        },
+        {
+            "src": "photo/screenshots/w1.png",
+            "sizes": "2736x1824",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "所有分店排隊情况"
+        },
+        {
+            "src": "photo/screenshots/w2.png",
+            "sizes": "2736x1824",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "分店排隊情况"
+        },
+        {
+            "src": "photo/screenshots/w3.png",
+            "sizes": "2736x1824",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "叫號提醒"
         }
     ]
 }
