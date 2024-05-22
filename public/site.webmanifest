@@ -1,44 +1,44 @@
 {
-   "name":"壽記追蹤器",
-   "short_name":"壽記追蹤器",
-   "description": "香港壽記排隊情况追蹤器",
-   "start_url":"https://sushiro-hk-tracker.gosa.app/",
-   "icons":[
-      {
-         "src":"/android-chrome-192x192.png",
-         "sizes":"192x192",
-         "type":"image/png"
-      },
-      {
-         "src":"/android-chrome-512x512.png",
-         "sizes":"512x512",
-         "type":"image/png"
-      }
-   ],
-   "theme_color":"#b02d39",
-   "background_color":"#ffffff",
-   "display":"standalone",
+    "name": "壽記追蹤器",
+    "short_name": "壽記追蹤器",
+    "description": "香港壽記排隊情况追蹤器",
+    "start_url": "https://sushiro-hk-tracker.gosa.app/",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#b02d39",
+    "background_color": "#ffffff",
+    "display": "standalone",
     "screenshots": [
-       {
-        "src": "photo/screenshots/1.png",
-         "sizes": "1170x2532",
-         "type": "image/png",
-         "form_factor": "narrow",
-         "label": "所有分店排隊情况"
-       },
-   {
-           "src": "photo/screenshots/2.png",
+        {
+            "src": "photo/screenshots/1.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "所有分店排隊情况"
+        },
+        {
+            "src": "photo/screenshots/2.png",
             "sizes": "1170x2532",
             "type": "image/png",
             "form_factor": "narrow",
             "label": "分店排隊情况"
-          },
-      {
-              "src": "photo/screenshots/3.png",
-               "sizes": "1170x2532",
-               "type": "image/png",
-               "form_factor": "narrow",
-               "label": "叫號提醒"
-             },
-   ]
+        },
+        {
+            "src": "photo/screenshots/3.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "叫號提醒"
+        }
+    ]
 }
