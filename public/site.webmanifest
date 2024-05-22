@@ -16,5 +16,28 @@
    ],
    "theme_color":"#b02d39",
    "background_color":"#ffffff",
-   "display":"standalone"
+   "display":"standalone",
+    "screenshots": [
+       {
+        "src": "photo/screenshots/1.png",
+         "sizes": "1170x2532",
+         "type": "image/png",
+         "form_factor": "narrow",
+         "label": "所有分店排隊情况"
+       },
+   {
+           "src": "photo/screenshots/2.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "分店排隊情况"
+          },
+      {
+              "src": "photo/screenshots/3.png",
+               "sizes": "1170x2532",
+               "type": "image/png",
+               "form_factor": "narrow",
+               "label": "叫號提醒"
+             },
+   ]
 }
