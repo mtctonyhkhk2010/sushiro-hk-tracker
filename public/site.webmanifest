@@ -1,6 +1,7 @@
 {
    "name":"壽記追蹤器",
    "short_name":"壽記追蹤器",
+   "description": "香港壽記排隊情况追蹤器",
    "start_url":"https://sushiro-hk-tracker.gosa.app/",
    "icons":[
       {
