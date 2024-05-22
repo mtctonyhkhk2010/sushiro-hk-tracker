@@ -3,14 +3,20 @@
 namespace App\Livewire;
 
 use App\Models\Store;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Tracker extends Component
 {
-    public function render()
+    #[Computed]
+    public function store_region()
     {
-        $store_region = Store::orderBy('sushiro_store_id')->get()->groupBy('region');
-        $liked_stores = Store::whereIn('id', session('liked_stores', []))->get();
-        return view('livewire.tracker', compact('store_region', 'liked_stores'));
+        return Store::orderBy('sushiro_store_id')->get()->groupBy('region');
+    }
+
+    #[Computed]
+    public function liked_stores()
+    {
+        return Store::whereIn('id', session('liked_stores', []))->get();
     }
 }
