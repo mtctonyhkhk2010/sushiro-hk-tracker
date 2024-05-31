@@ -10,7 +10,7 @@
         </div>
         <div class="flex-none w-14 h-14 ">
             <button class="btn btn-ghost btn-circle" wire:navigate href="/statistic">
-                統計數據
+                <x-heroicon-o-calculator class="w-5 h-5" />
             </button>
         </div>
     </div>
