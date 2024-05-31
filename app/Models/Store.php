@@ -26,4 +26,8 @@ class Store extends Model
         'store_queue' => 'array',
     ];
 
+    public function records(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Record::class);
+    }
 }

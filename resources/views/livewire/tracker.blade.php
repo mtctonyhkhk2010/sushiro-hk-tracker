@@ -1,8 +1,18 @@
 <div wire:poll.60s>
-    <div class="text-xl text-center">
-        壽記追蹤器
-        <br>
-        <span class="text-xs">更新時間: {{ now()->toDateTimeString() }}</span>
+    <div class="flex">
+        <div class="flex-none w-14 h-14 ">
+
+        </div>
+        <div class="text-xl text-center grow">
+            壽記追蹤器
+            <br>
+            <span class="text-xs">更新時間: {{ now()->toDateTimeString() }}</span>
+        </div>
+        <div class="flex-none w-14 h-14 ">
+            <button class="btn btn-ghost btn-circle" wire:navigate href="/statistic">
+                統計數據
+            </button>
+        </div>
     </div>
     @if($this->liked_stores->isNotEmpty())
         <x-header class="mb-3 mt-3" :size="'text-xl'">
