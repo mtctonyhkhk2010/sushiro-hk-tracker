@@ -20,7 +20,7 @@ class ShowStatistic extends Component
     {
          return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
              ->whereColumn('store_id', 'stores.id')
-             ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(8)->toDateString(). "' AND '" . now()->subDays(1)->toDateString(). "'")
+             ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString(). "' AND '" . now()->subDays(1)->toDateString(). "'")
              ->whereRaw('HOUR(created_at) = ?', [19])
          ])->orderBy('t_wait_group', 'asc')
              ->take(5)
@@ -32,7 +32,7 @@ class ShowStatistic extends Component
     {
         return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
             ->whereColumn('store_id', 'stores.id')
-            ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(8)->toDateString(). "' AND '" . now()->subDays(1)->toDateString(). "'")
+            ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString(). "' AND '" . now()->subDays(1)->toDateString(). "'")
             ->whereRaw('HOUR(created_at) = ?', [19])
         ])->orderBy('t_wait_group', 'desc')
             ->take(5)
