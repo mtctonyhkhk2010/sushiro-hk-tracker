@@ -12,22 +12,6 @@
 
         </div>
     </div>
-    <x-card title="最少人分店" subtitle="以最近14天數據計算" shadow separator class="mb-3">
-        @foreach($this->least_popular_stores as $store)
-            <x-list-item :item="$store" link="/store/{{$store->id}}" :no-separator="$loop->last" >
-                <x-slot:value>
-                    {{ $loop->iteration }}. {{ $store->name }}
-                </x-slot:value>
-            </x-list-item>
-        @endforeach
-    </x-card>
-    <x-card title="最多人分店" subtitle="以最近14天數據計算" shadow separator class="mb-3">
-        @foreach($this->most_popular_stores as $store)
-            <x-list-item :item="$store" link="/store/{{$store->id}}" :no-separator="$loop->last" >
-                <x-slot:value>
-                    {{ $loop->iteration }}. {{ $store->name }}
-                </x-slot:value>
-            </x-list-item>
-        @endforeach
-    </x-card>
+    <livewire:statistic.least-popular-stores></livewire:statistic.least-popular-stores>
+    <livewire:statistic.most-popular-stores></livewire:statistic.most-popular-stores>
 </div>
