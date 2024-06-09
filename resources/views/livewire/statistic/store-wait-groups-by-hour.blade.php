@@ -33,13 +33,29 @@
         xaxis: {
             categories: @js($this->wait_groups_by_hour->pluck('hour')),
             title: {
-                text: '時間'
+                text: '時間',
+                style: {
+                    color: '#a6adbb',
+                }
             },
+            labels: {
+                style: {
+                    colors: '#a6adbb',
+                },
+            }
         },
         yaxis: {
             title: {
-                text: '人數'
+                text: '人數',
+                style: {
+                    color: '#a6adbb',
+                }
             },
+            labels: {
+                style: {
+                    colors: '#a6adbb',
+                },
+            }
         },
         fill: {
             opacity: 1
