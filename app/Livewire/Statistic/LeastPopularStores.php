@@ -28,7 +28,7 @@ class LeastPopularStores extends Component
         return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
             ->whereColumn('store_id', 'stores.id')
             ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString(). "' AND '" . now()->subDays(1)->toDateString(). "'")
-            ->whereRaw('HOUR(created_at) in (?)', implode(',', $hour))
+            ->whereRaw('HOUR(created_at) in ('. implode(',', $hour) . ')')
         ])->orderBy('t_wait_group', 'asc')
             ->take(5)
             ->get();
