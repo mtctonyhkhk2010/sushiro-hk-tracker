@@ -87,6 +87,10 @@
             </x-modal>
         </div>
     @endif
+
+    <x-card title="此分店過往排隊人數">
+        <livewire:statistic.store-wait-groups-by-hour :store="$store"></livewire:statistic.store-wait-groups-by-hour>
+    </x-card>
 </div>
 
 @script
