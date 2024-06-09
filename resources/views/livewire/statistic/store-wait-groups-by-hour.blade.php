@@ -1,6 +1,4 @@
-<div>
-    <div id="chart"></div>
-</div>
+<div id="chart"></div>
 
 @assets
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -20,7 +18,7 @@
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '55%',
+                columnWidth: '100%',
                 endingShape: 'rounded'
             },
         },
