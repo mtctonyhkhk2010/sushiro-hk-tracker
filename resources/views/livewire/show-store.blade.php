@@ -67,7 +67,7 @@
             </x-card>
         </div>
 
-        <div x-data="notification">
+        <div x-data="notification" class="mb-3">
             @if(isset($this->pushSubscription))
                 <x-alert class="alert-info" icon="o-exclamation-triangle">
                     當{{ \App\Models\Store::find($this->pushSubscription->store_id)->name }}差唔多叫到{{ $this->pushSubscription->queue_number }}號就會提你
