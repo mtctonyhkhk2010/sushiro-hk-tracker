@@ -79,7 +79,7 @@
                 <x-button class="btn-warning btn-sm" label="叫號提醒" @click="$wire.queueModal = true" />
             @endif
             <x-modal wire:model="queueModal" title="你張飛幾多號？" subtitle="就到個陣提你">
-                <x-input x-model="queue_number" label="號碼" inline />
+                <x-input x-model.number="queue_number" label="號碼" inline />
                 <x-slot:actions>
                     <x-button label="取消" @click="$wire.queueModal = false" />
                     <x-button label="確認" class="btn-primary" x-on:click="requestNotification" />
