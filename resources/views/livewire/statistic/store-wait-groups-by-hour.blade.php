@@ -3,7 +3,7 @@
         <div></div>
         <x-dropdown label="{{ $this->get_day_of_week_name($day_of_week) }}" class="btn-warning btn-sm" right>
             @for($i = 0; $i < 7; $i++)
-                <x-menu-item :title="$this->get_day_of_week_name($i)" wire:click="$set('day_of_week', '{{ $i }}')" />
+                <x-menu-item :title="$this->get_day_of_week_name($i)" wire:click="update_day_of_week({{ $i }})" />
             @endfor
         </x-dropdown>
     </div>
@@ -87,18 +87,25 @@
 
             init()
             {
+
                 this.show_chart();
 
                 Livewire.on('update_chart', (wait_groups_by_hour) => {
+                    console.log('update_chart');
                     this.options.series[0].data = wait_groups_by_hour.value;
                     this.show_chart();
-                })
+                });
             },
 
             show_chart()
             {
                 const chart = new ApexCharts(document.querySelector("#chart"), this.options);
                 chart.render();
+
+                document.addEventListener('livewire:navigating', () => {
+                    console.log('destroy');
+                    chart.destroy();
+                })
             },
         }
     });
