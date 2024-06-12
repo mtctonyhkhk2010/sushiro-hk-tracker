@@ -1,4 +1,15 @@
-<div id="chart"></div>
+<div>
+    <div class="flex justify-between">
+        <div></div>
+        <x-dropdown label="{{ $this->get_day_of_week_name($day_of_week) }}" class="btn-warning btn-sm" right>
+            @for($i = 0; $i < 7; $i++)
+                <x-menu-item :title="$this->get_day_of_week_name($i)" wire:click="$set('day_of_week', '{{ $i }}')" />
+            @endfor
+        </x-dropdown>
+    </div>
+
+    <div id="chart"></div>
+</div>
 
 @assets
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -9,11 +20,14 @@
     const options = {
         series: [{
             name: '輪候人數',
-            data: @js($this->wait_groups_by_hour->pluck('t_wait_group')->map(function ($value) {return round($value/14);}))
+            data: @js($this->wait_groups_by_hour->pluck('t_wait_group')->map(function ($value) {return round($value/4);}))
         }],
         chart: {
             type: 'bar',
-            height: 350
+            height: 350,
+            toolbar: {
+                show: false
+            }
         },
         plotOptions: {
             bar: {

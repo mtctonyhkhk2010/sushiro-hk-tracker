@@ -4,6 +4,7 @@ namespace App\Livewire\Statistic;
 
 use App\Models\Record;
 use App\Models\Store;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -13,17 +14,37 @@ class StoreWaitGroupsByHour extends Component
 {
     public $store;
 
+    public $day_of_week;
+
+    public function mount()
+    {
+        $this->day_of_week = date('w');
+    }
+
     public function render()
     {
         return view('livewire.statistic.store-wait-groups-by-hour');
     }
 
+    public function get_day_of_week_name($day_of_week)
+    {
+        setlocale(LC_TIME,  'zh-Hant-TW');
+        return Carbon::create('Sunday +' . $day_of_week . ' days')->localeDayOfWeek;
+    }
+
     #[Computed]
     public function wait_groups_by_hour()
     {
-        return Cache::remember('wait_groups_by_hour_' . $this->store->id, 60 * 60 * 12, function () {
+        //get the last 4 dates of same day of week
+        $dates = [];
+        $date = now()->subDay();
+        while (count($dates) < 4) {
+            if ($date->dayOfWeek() == $this->day_of_week) $dates[] = $date->toDateString();
+            $date = $date->subDay();
+        }
+        return Cache::remember('wait_groups_by_hour_'. $this->day_of_week . '_' . $this->store->id, 60 * 60 * 12, function () use ($dates) {
             return Record::where('store_id', $this->store->id)
-                ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString() . "' AND '" . now()->subDays(1)->toDateString() . "'")
+                ->whereIn(DB::raw('DATE(created_at)'), $dates)
                 ->whereRaw('HOUR(created_at) BETWEEN 10 AND 22')
                 ->whereRaw('MINUTE(created_at) BETWEEN 0 AND 5')
                 ->select([DB::raw('SUM(wait_group) as t_wait_group'), DB::raw('HOUR(created_at) as hour')])
