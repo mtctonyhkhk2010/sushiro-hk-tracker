@@ -87,7 +87,6 @@
 
             init()
             {
-
                 this.show_chart();
 
                 Livewire.on('update_chart', (wait_groups_by_hour) => {
@@ -101,11 +100,6 @@
             {
                 const chart = new ApexCharts(document.querySelector("#chart"), this.options);
                 chart.render();
-
-                document.addEventListener('livewire:navigating', () => {
-                    console.log('destroy');
-                    chart.destroy();
-                })
             },
         }
     });
