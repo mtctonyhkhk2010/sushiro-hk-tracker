@@ -42,7 +42,8 @@ class StoreWaitGroupsByHour extends Component
             if ($date->dayOfWeek() == $this->day_of_week) $dates[] = $date->toDateString();
             $date = $date->subDay();
         }
-        return Cache::remember('wait_groups_by_hour_'. $this->day_of_week . '_' . $this->store->id, 60 * 60 * 12, function () use ($dates) {
+
+        $record = Cache::remember('1wait_groups_by_hour_'. $this->day_of_week . '_' . $this->store->id, 60 * 60 * 12, function () use ($dates) {
             return Record::where('store_id', $this->store->id)
                 ->whereIn(DB::raw('DATE(created_at)'), $dates)
                 ->whereRaw('HOUR(created_at) BETWEEN 10 AND 22')
@@ -51,5 +52,9 @@ class StoreWaitGroupsByHour extends Component
                 ->groupBy('hour')
                 ->get();
         });
+
+        $this->dispatch('update_chart', hour : $record->pluck('hour'), value: $record->pluck('t_wait_group')->map(function ($value) {return round($value/4);}));
+
+        return $record;
     }
 }
