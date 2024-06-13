@@ -44,7 +44,7 @@ class StoreWaitGroupsByHour extends Component
     #[Computed]
     public function popularity()
     {
-        $t_wait_group = $this->wait_groups_by_hour()->where('hour', now()->hour)->first()?->t_wait_group ?? 0;
+        $t_wait_group = ($this->wait_groups_by_hour()->where('hour', now()->hour)->first()?->t_wait_group ?? 0) / 4;
 
         if ($t_wait_group > $this->wait_group + 5) return '比平時少人';
         if (abs($t_wait_group - $this->wait_group) <= 5) return '同平時差唔多人';
