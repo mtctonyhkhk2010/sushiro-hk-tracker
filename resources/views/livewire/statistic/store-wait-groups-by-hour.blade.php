@@ -1,6 +1,6 @@
 <div x-data="store_wait_group">
     <div class="flex justify-between">
-        <div></div>
+        <div class="font-bold text-sky-300">{{ $this->popularity }}</div>
         <x-dropdown label="{{ $this->get_day_of_week_name($day_of_week) }}" class="btn-warning btn-sm" right>
             @for($i = 0; $i < 7; $i++)
                 <x-menu-item :title="$this->get_day_of_week_name($i)" wire:click="update_day_of_week({{ $i }})" />

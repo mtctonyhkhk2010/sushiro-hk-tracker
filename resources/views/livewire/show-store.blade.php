@@ -38,7 +38,7 @@
         @endif
         <div class="flex gap-3">
             @if($store->status === \App\Enums\StoreStatus::Open)
-                @forelse($store->store_queue as $number)
+                @forelse($store->store_queue ?? [] as $number)
                     <x-badge :value="$number" class="badge-neutral" />
                 @empty
                     <x-badge value="無人排隊" class="badge-accent" />
@@ -89,7 +89,7 @@
     @endif
 
     <x-card title="此分店過往排隊人數">
-        <livewire:statistic.store-wait-groups-by-hour :store="$store"></livewire:statistic.store-wait-groups-by-hour>
+        <livewire:statistic.store-wait-groups-by-hour :store="$store" :wait_group="$store->wait_group"></livewire:statistic.store-wait-groups-by-hour>
     </x-card>
 </div>
 

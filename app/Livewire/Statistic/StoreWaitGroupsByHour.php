@@ -14,6 +14,8 @@ class StoreWaitGroupsByHour extends Component
 {
     public $store;
 
+    public $wait_group;
+
     public $day_of_week;
 
     public function mount()
@@ -37,6 +39,16 @@ class StoreWaitGroupsByHour extends Component
         $this->day_of_week = $day_of_week;
         $record = $this->wait_groups_by_hour();
         $this->dispatch('update_chart', hour : $record->pluck('hour'), value: $record->pluck('t_wait_group')->map(function ($value) {return round($value/4);}));
+    }
+
+    #[Computed]
+    public function popularity()
+    {
+        $t_wait_group = $this->wait_groups_by_hour()->where('hour', now()->hour)->first()?->t_wait_group ?? 0;
+
+        if ($t_wait_group > $this->wait_group + 5) return '比平時少人';
+        if (abs($t_wait_group - $this->wait_group) <= 5) return '同平時差唔多人';
+        if ($t_wait_group < $this->wait_group - 5) return '比平時多人';
     }
 
     #[Computed]
