@@ -20,34 +20,13 @@
     Alpine.data('store_wait_group', () => {
         return {
             options: {
-                series: [{
-                    name: '輪候人數' + $wire.$get('day_of_week'),
-                    data: @js($this->wait_groups_by_hour->pluck('t_wait_group')->map(function ($value) {return round($value/4);}))
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    toolbar: {
-                        show: false
+                series: [
+                    {
+                        name: '輪候人數',
+                        data: @js($this->wait_groups_by_hour)
                     }
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '100%',
-                        endingShape: 'rounded'
-                    },
-                },
-                dataLabels: {
-                    enabled: false,
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['transparent']
-                },
+                ],
                 xaxis: {
-                    categories: @js($this->wait_groups_by_hour->pluck('hour')),
                     title: {
                         text: '時間',
                         style: {
@@ -73,15 +52,30 @@
                         },
                     }
                 },
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                    toolbar: {
+                        show: false
+                    },
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '100%'
+                    }
+                },
+                colors: ['#00aee3'],
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    show: true,
+                    markers: {
+                        fillColors: ['#00aee3', '#d05da2']
+                    }
+                },
                 fill: {
                     opacity: 1
-                },
-                tooltip: {
-                    y: {
-                        formatter: function (val) {
-                            return val
-                        }
-                    }
                 }
             },
 

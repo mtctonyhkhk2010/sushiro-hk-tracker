@@ -38,7 +38,7 @@ class StoreWaitGroupsByHour extends Component
     {
         $this->day_of_week = $day_of_week;
         $record = $this->wait_groups_by_hour();
-        $this->dispatch('update_chart', hour : $record->pluck('hour'), value: $record->pluck('t_wait_group')->map(function ($value) {return round($value/4);}));
+        $this->dispatch('update_chart', value: $record);
     }
 
     #[Computed]
@@ -62,7 +62,7 @@ class StoreWaitGroupsByHour extends Component
             $date = $date->subDay();
         }
 
-        return Cache::remember('1wait_groups_by_hour_'. $this->day_of_week . '_' . $this->store->id, 60 * 60 * 12, function () use ($dates) {
+        $records = Cache::remember('1wait_groups_by_hour_'. $this->day_of_week . '_' . $this->store->id, 60 * 60 * 12, function () use ($dates) {
             return Record::where('store_id', $this->store->id)
                 ->whereIn(DB::raw('DATE(created_at)'), $dates)
                 ->whereRaw('HOUR(created_at) BETWEEN 10 AND 22')
@@ -71,5 +71,23 @@ class StoreWaitGroupsByHour extends Component
                 ->groupBy('hour')
                 ->get();
         });
+
+        foreach ($records as $record)
+        {
+            $record->x = "$record->hour";
+            $record->y = round($record->t_wait_group / 4);
+            if ($record->hour == now()->hour)
+            {
+                $record->fillColor = '#EB8C87';
+                $record->goals = [
+                    'name' => 'Now',
+                    'value' => $this->wait_group,
+                    'strokeHeight' => 2,
+                    'strokeColor' => '#775DD0'
+                ];
+            }
+        }
+
+        return $records;
     }
 }
