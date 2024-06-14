@@ -31,7 +31,7 @@
         env: 'AutodeskProduction2',
         api: 'streamingV2',  // for models uploaded to EMEA change this option to 'streamingV2_EU'
         getAccessToken: function(onTokenReady) {
-            const token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjY0RE9XMnJoOE9tbjNpdk1NU0xlNGQ2VHEwUV9SUzI1NiIsInBpLmF0bSI6ImFzc2MifQ.eyJzY29wZSI6WyJjb2RlOmFsbCIsImRhdGE6d3JpdGUiLCJkYXRhOnJlYWQiLCJidWNrZXQ6Y3JlYXRlIiwiYnVja2V0OmRlbGV0ZSIsImJ1Y2tldDpyZWFkIl0sImNsaWVudF9pZCI6ImVMSHFZdUFTN21rTXZVOW5GRldyTktTbnJobG1IbWtwc1dwV0dlSUlJclFvaVhRMiIsImlzcyI6Imh0dHBzOi8vZGV2ZWxvcGVyLmFwaS5hdXRvZGVzay5jb20iLCJhdWQiOiJodHRwczovL2F1dG9kZXNrLmNvbSIsImp0aSI6Ik1zSm5ZUjM2Um1aMzZ1cnQ1QUNsSjhYeExsaERpMkNPYXZPMTNFWHRtb0xwR1VUdmVaemZUc09WMlZUNndVWjEiLCJleHAiOjE3MTgzNTI1NTZ9.cqJTGdo6i5_17DJKkEMxTu3a5czTAl2MnN6pU9YVApomWhD230silGveqkjLxzlMrqJsmU-vUclYKwYeAIP9ZxEarDXjAjP4H_d3Zq4K6L9275w3sbbqlECDmFbN1sKYI2HZx6ONyI99SswsVFSWvTqXFSHXWMYovBGkEhBY_DtUn9OEJAEDvhiaDtLKsSmS-aamW7eOYO2dn9KAXi8A3bcd4rEIHkefBkkZSCPqtgstxGeeBh33LoXMfJUh-i6eydlLufe_B2n9FDju8c7JOxte_Nb-HrWL8_QVCO5Bmry53ZE81iBKfSZe9JRlUkCqup-Y61xFvxUiQHLN65gv6g';
+            const token = '{{ $access_token }}';
             const timeInSeconds = 3600; // Use value provided by APS Authentication (OAuth) API
             onTokenReady(token, timeInSeconds);
         }
