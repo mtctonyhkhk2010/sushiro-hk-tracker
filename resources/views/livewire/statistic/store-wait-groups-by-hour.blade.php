@@ -61,7 +61,7 @@
                 },
                 plotOptions: {
                     bar: {
-                        columnWidth: '100%'
+                        columnWidth: '98%'
                     }
                 },
                 colors: ['#00aee3'],
