@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Welcome;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', \App\Livewire\Tracker::class);
 Route::get('/store/{store}', \App\Livewire\ShowStore::class);
 Route::get('/statistic', \App\Livewire\ShowStatistic::class);
+Route::get('/test3d', function (Request $request) {
+    return view('test');
+});
