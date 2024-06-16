@@ -42,7 +42,7 @@
         const htmlDiv = document.getElementById('forgeViewer');
         viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv);
 
-        const documentId = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6ZGFpbHlzdXBwbHkuZG5wLzIwMjQwNjE0LWFzbS1hMl9hc20uU1RFUA';
+        const documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6ZGFpbHlzdXBwbHkuZG5wLzIwMjQwNjE0LWFzbS1hMl9hc20uU1RFUA';
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
         function onDocumentLoadSuccess(viewerDocument) {
