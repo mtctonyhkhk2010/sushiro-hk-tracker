@@ -6,6 +6,7 @@ use App\Models\Record;
 use App\Models\Statistic;
 use App\Models\Store;
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 
 class getStoresGroupQueues extends Command
@@ -37,12 +38,18 @@ class getStoresGroupQueues extends Command
 
         $stores = Store::all();
 
-        foreach ($stores as $store) {
-            $response = Http::get('https://sushipass.sushiro.com.hk/api/2.0/remote/groupqueues?region=HK&storeid=' . $store->sushiro_store_id);
+        $responses = Http::pool(function (Pool $pool) use ($stores) {
+            foreach ($stores as $store) {
+                $pool->as($store->sushiro_store_id)->get('https://sushipass.sushiro.com.hk/api/2.0/remote/groupqueues?region=HK&storeid=' . $store->sushiro_store_id);
+            }
+        });
 
+        foreach ($responses as $store_id => $response) {
             if ($response->failed()) continue;
 
             $response = $response->collect();
+
+            $store = $stores->where('sushiro_store_id', $store_id)->first();
 
             $target_store = $store_response->firstWhere('id', $store->sushiro_store_id);
 
