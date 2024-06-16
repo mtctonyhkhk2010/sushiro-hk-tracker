@@ -106,6 +106,8 @@
             requestNotification() {
                 if ( ! Number.isInteger(this.queue_number)) return;
 
+                $wire.queueModal = false;
+
                 Notification.requestPermission().then((permission) => {
                     if (permission === 'granted') {
 
@@ -131,7 +133,6 @@
                                         data: subscription,
                                     })
                                 }).then(() => {
-                                    $wire.queueModal = false;
                                     $wire.$refresh();
                                 });
                             });
