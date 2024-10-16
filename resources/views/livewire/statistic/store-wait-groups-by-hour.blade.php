@@ -1,8 +1,10 @@
 <div x-data="store_wait_group">
     <div class="flex justify-between">
-        <div class="font-bold @if($this->popularity == '比平時少人') text-emerald-300 @endif
-        @if($this->popularity == '同平時差唔多人') text-sky-300 @endif
-        @if($this->popularity == '比平時多人') text-red-300 @endif">{{ $this->popularity }}</div>
+        @if($store->status === \App\Enums\StoreStatus::Open)
+            <div class="font-bold @if($this->popularity == '比平時少人') text-emerald-300 @endif
+            @if($this->popularity == '同平時差唔多人') text-sky-300 @endif
+            @if($this->popularity == '比平時多人') text-red-300 @endif">{{ $this->popularity }}</div>
+        @endif
         <x-dropdown label="{{ $this->get_day_of_week_name($day_of_week) }}" class="btn-warning btn-sm" right>
             @for($i = 0; $i < 7; $i++)
                 <x-menu-item :title="$this->get_day_of_week_name($i)" wire:click="update_day_of_week({{ $i }})" />
