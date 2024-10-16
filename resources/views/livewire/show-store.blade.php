@@ -31,7 +31,7 @@
         </div>
     </div>
     <x-card title="下一組顧客" class="mb-3" shadow separator>
-        @if(!$store->local_ticketing_status)
+        @if(!$store->local_ticketing_status && $store->status === \App\Enums\StoreStatus::Open)
         <x-slot:subtitle>
             <x-badge value="已停飛" class="badge-secondary" />
         </x-slot:subtitle>
