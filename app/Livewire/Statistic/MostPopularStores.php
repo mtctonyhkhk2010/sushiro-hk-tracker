@@ -34,7 +34,7 @@ class MostPopularStores extends Component
             ])->orderBy('t_wait_group', 'desc')
                 ->take(5)
                 ->get()
-                ->only(['id', 'name', 't_wait_group']);
+                ->map->only(['id', 'name', 't_wait_group'])->values();
 //        });
     }
 }
