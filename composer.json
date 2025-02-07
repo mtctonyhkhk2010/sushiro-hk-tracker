@@ -16,6 +16,7 @@
         "livewire/livewire": "^3.4",
         "matanyadaev/laravel-eloquent-spatial": "^4.2",
         "minishlink/web-push": "^8.0",
+        "opcodesio/log-viewer": "^3.14",
         "robsontenorio/mary": "^1.30",
         "spatie/laravel-translatable": "^6.6"
     },
