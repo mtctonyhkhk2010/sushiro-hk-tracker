@@ -33,7 +33,7 @@ class LeastPopularStores extends Component
                 ->whereRaw('HOUR(created_at) in (' . implode(',', $hour) . ')')
             ])->orderBy('t_wait_group', 'asc')
                 ->take(5)
-                ->select(['id', 'name', 'store_id', 'wait_group'])
+                ->select(['id', 'name', 'wait_group'])
                 ->get();
 //        });
     }
