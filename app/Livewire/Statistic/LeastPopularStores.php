@@ -26,12 +26,14 @@ class LeastPopularStores extends Component
         if ($this->time == '午市') $hour = [13];
         if ($this->time == '晚市') $hour = [19];
 
-        return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
-            ->whereColumn('store_id', 'stores.id')
-            ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString() . "' AND '" . now()->subDays(1)->toDateString() . "'")
-            ->whereRaw('HOUR(created_at) in (' . implode(',', $hour) . ')')
-        ])->orderBy('t_wait_group', 'asc')
-            ->take(5)
-            ->get();
+        return Cache::remember('least-popular-stores', 60 * 60 * 6, function () use ($hour) {
+            return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
+                ->whereColumn('store_id', 'stores.id')
+                ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString() . "' AND '" . now()->subDays(1)->toDateString() . "'")
+                ->whereRaw('HOUR(created_at) in (' . implode(',', $hour) . ')')
+            ])->orderBy('t_wait_group', 'asc')
+                ->take(5)
+                ->get();
+        });
     }
 }
