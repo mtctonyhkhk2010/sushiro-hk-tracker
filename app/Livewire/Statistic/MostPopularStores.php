@@ -26,7 +26,7 @@ class MostPopularStores extends Component
         if ($this->time == '午市') $hour = [13];
         if ($this->time == '晚市') $hour = [19];
 
-        return Cache::remember('most-popular-stores', 60 * 60 * 6, function () use ($hour) {
+//        return Cache::remember('most-popular-stores', 60 * 60 * 6, function () use ($hour) {
             return Store::addSelect(['t_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
                 ->whereColumn('store_id', 'stores.id')
                 ->whereRaw("DATE(created_at) BETWEEN '" . now()->subDays(15)->toDateString() . "' AND '" . now()->subDays(1)->toDateString() . "'")
@@ -34,6 +34,6 @@ class MostPopularStores extends Component
             ])->orderBy('t_wait_group', 'desc')
                 ->take(5)
                 ->get();
-        });
+//        });
     }
 }
