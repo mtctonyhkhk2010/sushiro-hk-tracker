@@ -17,7 +17,7 @@
         "matanyadaev/laravel-eloquent-spatial": "^4.2",
         "minishlink/web-push": "^8.0",
         "opcodesio/log-viewer": "^3.14",
-        "robsontenorio/mary": "^1.30",
+        "robsontenorio/mary": "^2.0",
         "spatie/laravel-translatable": "^6.6"
     },
     "require-dev": {

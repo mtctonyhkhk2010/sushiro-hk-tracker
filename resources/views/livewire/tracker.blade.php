@@ -15,7 +15,7 @@
         </div>
     </div>
     @if($this->liked_stores->isNotEmpty())
-        <x-header class="mb-3 mt-3" :size="'text-xl'">
+        <x-header class="!mb-3 mt-3" :size="'text-xl'">
             <x-slot:title class="text-2xl">
                 已置頂
             </x-slot:title>
@@ -27,7 +27,7 @@
         </div>
     @endif
     @foreach($this->store_region as $region => $stores)
-        <x-header class="mb-3 mt-3" :size="'text-xl'">
+        <x-header class="!mb-3 mt-3" :size="'text-xl'">
             <x-slot:title class="text-2xl">
                 {{ $region }}
             </x-slot:title>

@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="card bg-base-100 mb-3 shadow-xl">
+    <div class="card bg-base-100 mb-3" shadow>
         <div class="card-body">
             <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ $store->location->latitude }},{{ $store->location->longitude }}">
                 <p><x-icon name="o-map" /> {{ $store->address }}</p>
@@ -39,7 +39,7 @@
         <div class="flex gap-3">
             @if($store->status === \App\Enums\StoreStatus::Open)
                 @forelse($store->store_queue ?? [] as $number)
-                    <x-badge :value="$number" class="badge-neutral" />
+                    <x-badge :value="$number" class="badge-soft" />
                 @empty
                     <x-badge value="無人排隊" class="badge-accent" />
                 @endforelse

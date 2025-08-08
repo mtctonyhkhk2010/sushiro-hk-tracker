@@ -19,7 +19,7 @@
             <hr class="my-3" />
             @if($store->status === \App\Enums\StoreStatus::Open)
                 @forelse($store->store_queue ?? [] as $number)
-                    <x-badge :value="$number" class="badge-neutral" />
+                    <x-badge :value="$number" class="badge-soft" />
                 @empty
                     <x-badge value="無人排隊" class="badge-accent" />
                 @endforelse
