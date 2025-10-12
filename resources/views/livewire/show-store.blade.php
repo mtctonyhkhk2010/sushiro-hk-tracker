@@ -1,4 +1,4 @@
-<div wire:poll.60s>
+<div wire:poll.10s>
     <div class="flex">
         <div class="flex-none w-14 h-14 ">
             <button class="btn btn-ghost btn-circle" wire:navigate href="/">
