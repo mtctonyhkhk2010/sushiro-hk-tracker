@@ -14,7 +14,7 @@ class Store extends Model
     use HasTranslations;
     use HasSpatial;
 
-    public $translatable = ['name'];
+    public array $translatable = ['name'];
 
     protected $guarded = [
 
