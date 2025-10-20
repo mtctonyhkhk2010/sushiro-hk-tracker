@@ -37,7 +37,20 @@ class pushNotificationForQueue extends Command
 
             if (!isset($store->store_queue[0])) continue;
 
-            if ($store->store_queue[0] < $push_sub->queue_number - 5) continue;
+            $queue_first_number = $store->store_queue[0];
+
+            //skip reservation queue
+            if ($queue_first_number > 8000)
+            {
+                foreach ($store->store_queue as $queue_number)
+                {
+                    if ($queue_number > 8000) continue;
+                    $queue_first_number = $queue_number;
+                    break;
+                }
+            }
+
+            if ($queue_first_number < $push_sub->queue_number - 7) continue;
 
             $webPush = new WebPush([
                 "VAPID" => [
@@ -51,7 +64,7 @@ class pushNotificationForQueue extends Command
                 Subscription::create(json_decode($push_sub->data ,true)),
                 json_encode([
                     'title' => '就到你!',
-                    'body' => '叫到'.$store->store_queue[0].'啦, 快d埋位啦',
+                    'body' => '叫到'.$queue_first_number.'啦, 快d埋位啦',
                     'url' => config('app.url')."/store/".$push_sub->store_id,
                 ]),
                 ['TTL' => 300, 'urgency' => 'normal']
