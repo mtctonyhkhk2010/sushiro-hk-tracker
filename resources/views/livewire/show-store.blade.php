@@ -79,10 +79,21 @@
                 <x-button class="btn-warning btn-sm" label="叫號提醒" @click="$wire.queueModal = true" />
             @endif
             <x-modal wire:model="queueModal" title="你張飛幾多號？" subtitle="就到個陣提你">
-                <x-input x-model.number="queue_number" label="號碼" inline />
+                <x-input x-model.number="queue_number" x-bind:disabled="isRegistering" label="號碼" inline />
                 <x-slot:actions>
-                    <x-button label="取消" @click="$wire.queueModal = false" />
-                    <x-button label="確認" class="btn-primary" x-on:click="requestNotification" />
+                    <x-button label="取消" x-bind:disabled="isRegistering" @click="$wire.queueModal = false" />
+                    <x-button
+                        class="btn-primary"
+                        x-bind:disabled="isRegistering"
+                        x-bind:aria-busy="isRegistering"
+                        x-on:click="requestNotification"
+                    >
+                        <span x-show="!isRegistering">確認</span>
+                        <span x-show="isRegistering" style="display: none" class="flex items-center gap-2">
+                            <span class="loading loading-spinner h-5 w-5"></span>
+                            登記中…
+                        </span>
+                    </x-button>
                 </x-slot:actions>
             </x-modal>
         </div>
@@ -102,43 +113,44 @@
     Alpine.data('notification', () => {
         return {
             queue_number: null,
+            isRegistering: false,
 
-            requestNotification() {
-                if ( ! Number.isInteger(this.queue_number)) return;
+            async requestNotification() {
+                if ( ! Number.isInteger(this.queue_number) || this.isRegistering) return;
 
-                $wire.queueModal = false;
+                this.isRegistering = true;
 
-                Notification.requestPermission().then((permission) => {
-                    if (permission === 'granted') {
+                try {
+                    const permission = await Notification.requestPermission();
 
-                        //get service worker
-                        navigator.serviceWorker.ready.then((sw) => {
+                    if (permission !== 'granted') return;
 
-                            //subscribe
-                            sw.pushManager.subscribe({
-                                userVisibleOnly: true,
-                                applicationServerKey: "BDTBZSCdaa_airwORtBHlMrKE2HO4QasA1T0ZEONmsrh9qnUVQ7uKCgglVgwLHL46d-J69SscQCr81iNUhsVrMw"
-                            }).then((subscription) => {
-                                //subscription successful
-                                fetch("/api/push-subscribe", {
-                                    method: "post",
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        store_id: @js($store->id),
-                                        queue_number: this.queue_number,
-                                        session_id: @js(session()->getId()),
-                                        data: subscription,
-                                    })
-                                }).then(() => {
-                                    $wire.$refresh();
-                                });
-                            });
-                        });
-                    }
-                });
+                    const sw = await navigator.serviceWorker.ready;
+                    const subscription = await sw.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: "BDTBZSCdaa_airwORtBHlMrKE2HO4QasA1T0ZEONmsrh9qnUVQ7uKCgglVgwLHL46d-J69SscQCr81iNUhsVrMw"
+                    });
+                    const response = await fetch("/api/push-subscribe", {
+                        method: "post",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            store_id: @js($store->id),
+                            queue_number: this.queue_number,
+                            session_id: @js(session()->getId()),
+                            data: subscription,
+                        })
+                    });
+
+                    if ( ! response.ok) throw new Error('Notification registration failed.');
+
+                    $wire.queueModal = false;
+                    await $wire.$refresh();
+                } finally {
+                    this.isRegistering = false;
+                }
             },
         }
     })
