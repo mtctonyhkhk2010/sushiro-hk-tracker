@@ -89,7 +89,7 @@
             {
                 this.show_chart();
 
-                Livewire.on('update_chart', (wait_groups_by_hour) => {
+                $wire.on('update_chart', (wait_groups_by_hour) => {
                     this.options.series[0].data = wait_groups_by_hour.value;
                     this.show_chart();
                 });
