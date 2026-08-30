@@ -5,6 +5,7 @@ use App\Livewire\Tracker;
 use App\Models\Store;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Validation\ValidationException;
+use Livewire\Livewire;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 uses(DatabaseTransactions::class);
@@ -77,3 +78,21 @@ it('rejects invalid location coordinates', function (mixed $latitude, mixed $lon
     'longitude below minimum' => [22, -181],
     'non-numeric coordinates' => ['north', 'east'],
 ]);
+
+it('persists the sorting method across component instances', function () {
+    session()->flush();
+
+    Livewire::test(Tracker::class)
+        ->call('sortByDistance', 22.3, 114.17);
+
+    Livewire::test(Tracker::class)
+        ->assertSet('sortMethod', 'distance')
+        ->assertSet('latitude', 22.3)
+        ->assertSet('longitude', 114.17)
+        ->call('sortAlphabetically');
+
+    Livewire::test(Tracker::class)
+        ->assertSet('sortMethod', 'alphabetical')
+        ->assertSet('latitude', null)
+        ->assertSet('longitude', null);
+});

@@ -7,17 +7,21 @@ use Collator;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Session;
 use Livewire\Component;
 
 class Tracker extends Component
 {
     #[Locked]
+    #[Session]
     public string $sortMethod = 'alphabetical';
 
     #[Locked]
+    #[Session]
     public ?float $latitude = null;
 
     #[Locked]
+    #[Session]
     public ?float $longitude = null;
 
     public bool $locationModal = false;

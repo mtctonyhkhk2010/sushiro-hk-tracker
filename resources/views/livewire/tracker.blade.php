@@ -44,7 +44,7 @@
         subtitle="我們需要你允許位置存取"
         separator
     >
-        <p>確認後，瀏覽器會顯示原生位置權限視窗。你的位置只會用來計算分店距離，不會被儲存。</p>
+        <p>確認後，瀏覽器會顯示原生位置權限視窗。你的位置只會用來計算分店距離，並只會在今次瀏覽階段保留。</p>
 
         <x-slot:actions>
             <x-button label="取消" x-on:click="$wire.locationModal = false" data-testid="cancel-location" />
