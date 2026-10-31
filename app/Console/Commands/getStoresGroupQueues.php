@@ -56,7 +56,7 @@ class getStoresGroupQueues extends Command
         });
 
         foreach ($responses as $store_id => $response) {
-            if ($response instanceof \Throwable || $response->failed() || ! is_array($response->json('storeQueue'))) {
+            if ($response instanceof \Throwable || $response->failed() || ! is_array($response->json('mixedQueue'))) {
                 continue;
             }
 
@@ -72,7 +72,7 @@ class getStoresGroupQueues extends Command
 
             $store->update([
                 'status' => $target_store['storeStatus'],
-                'store_queue' => $response['storeQueue'],
+                'store_queue' => $response['mixedQueue'],
                 'wait_group' => $target_store['waitingGroup'],
                 'wait_time' => $target_store['wait'],
                 'local_ticketing_status' => $target_store['localTicketingStatus'] === 'ON',

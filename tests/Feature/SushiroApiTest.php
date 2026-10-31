@@ -33,7 +33,9 @@ it('refreshes queues and waiting statistics using the CRM endpoints', function (
     Http::fake([
         'crm.example.test/api/2.0/info/storelist*' => Http::response([$directory]),
         'crm.example.test/api/2.0/remote/groupqueues*' => Http::response([
-            'storeQueue' => ['006', '007', '008'],
+            'mixedQueue' => ['006', '007', '008'],
+            'reservationQueue' => ['8082', '8083'],
+            'storeQueue' => ['006', '8082', '007'],
         ]),
     ]);
 
@@ -69,7 +71,7 @@ it('preserves queue data when a grouped queue cannot be read', function (string 
         'crm.example.test/api/2.0/remote/groupqueues*' => match ($failure) {
             'http error' => Http::response([], 503),
             'connection error' => Http::failedConnection(),
-            'missing queue' => Http::response(['message' => 'Unavailable']),
+            'missing queue' => Http::response(['storeQueue' => ['8082']]),
         },
     ]);
 
@@ -79,12 +81,35 @@ it('preserves queue data when a grouped queue cannot be read', function (string 
         ->and(Record::where('store_id', $store->id)->exists())->toBeFalse();
 })->with(['http error', 'connection error', 'missing queue']);
 
+it('keeps walk-in ticket formatting and order from the combined walk-in queue', function () {
+    $store = createSushiroTestStore(900001);
+
+    Http::fake([
+        'crm.example.test/api/2.0/info/storelist*' => Http::response([sushiroStorePayload(900001)]),
+        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response([
+            'boothQueue' => ['011-1', '011-2'],
+            'counterQueue' => ['012'],
+            'mixedQueue' => ['011-1', '012', '011-2'],
+            'reservationQueue' => ['8082'],
+            'storeQueue' => ['011-1', '8082', '012'],
+        ]),
+    ]);
+
+    $this->artisan('app:get-stores-group-queues')->assertSuccessful();
+
+    expect($store->fresh()->store_queue)->toBe(['011-1', '012', '011-2']);
+});
+
 it('accepts an empty queue without losing store status updates', function () {
     $store = createSushiroTestStore(900001);
 
     Http::fake([
         'crm.example.test/api/2.0/info/storelist*' => Http::response([sushiroStorePayload(900001)]),
-        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response(['storeQueue' => []]),
+        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response([
+            'mixedQueue' => [],
+            'reservationQueue' => ['8082'],
+            'storeQueue' => ['8082'],
+        ]),
     ]);
 
     $this->artisan('app:get-stores-group-queues')->assertSuccessful();
@@ -98,7 +123,7 @@ it('skips stores missing from the directory', function () {
 
     Http::fake([
         'crm.example.test/api/2.0/info/storelist*' => Http::response([]),
-        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response(['storeQueue' => ['006']]),
+        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response(['mixedQueue' => ['006']]),
     ]);
 
     $this->artisan('app:get-stores-group-queues')->assertSuccessful();
