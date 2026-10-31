@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Store;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class getNewStores extends Command
@@ -26,11 +27,16 @@ class getNewStores extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        $store_response = Http::get('https://sushipass.sushiro.com.hk/api/2.0/info/storelist?latitude=22&longitude=114&numresults=99&region=HK');
+        $store_response = Http::get(rtrim(config('services.sushiro.base_url'), '/').'/info/storelist', [
+            'guid' => config('services.sushiro.guid') ?: (string) Str::uuid(),
+            'region' => config('services.sushiro.region'),
+        ]);
 
-        if ($store_response->failed()) return;
+        if ($store_response->failed() || ! is_array($store_response->json()) || ! array_is_list($store_response->json()) || $store_response->json() === []) {
+            return self::FAILURE;
+        }
 
         $store_response = $store_response->collect();
 
@@ -40,8 +46,7 @@ class getNewStores extends Command
 
         $closed_stores_ids = $stores->pluck('sushiro_store_id')->diff($store_response->pluck('id'));
 
-        foreach ($store_response->whereIn('id', $new_stores_ids) as $store)
-        {
+        foreach ($store_response->whereIn('id', $new_stores_ids) as $store) {
             Store::create([
                 'sushiro_store_id' => $store['id'],
                 'name' => $store['name'],
@@ -52,6 +57,10 @@ class getNewStores extends Command
             ]);
         }
 
-        if ($closed_stores_ids->isNotEmpty()) Store::whereIn('id', $closed_stores_ids)->delete();
+        if ($closed_stores_ids->isNotEmpty()) {
+            Store::whereIn('sushiro_store_id', $closed_stores_ids)->delete();
+        }
+
+        return self::SUCCESS;
     }
 }

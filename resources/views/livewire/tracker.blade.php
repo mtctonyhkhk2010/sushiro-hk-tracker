@@ -72,7 +72,7 @@
         </x-header>
         <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4 xl:gap-4">
             @foreach($this->liked_stores as $store)
-                <livewire:store-card :store="$store" wire:key="liked-store-{{ $store->id }}"></livewire:store-card>
+                @include('livewire.store-card', ['store' => $store, 'storeCardKey' => 'liked-store-'.$store->id])
             @endforeach
         </div>
     @endif
@@ -84,7 +84,7 @@
         </x-header>
         <div class="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 xl:grid-cols-4 xl:gap-4">
             @foreach($stores as $store)
-                <livewire:store-card :store="$store" wire:key="region-store-{{ $store->id }}"></livewire:store-card>
+                @include('livewire.store-card', ['store' => $store, 'storeCardKey' => 'region-store-'.$store->id])
             @endforeach
         </div>
     @endforeach

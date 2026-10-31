@@ -1,4 +1,4 @@
-<div class="card bg-base-100 rounded-lg p-3">
+<div wire:key="{{ $storeCardKey ?? 'store-'.$store->id }}" class="card bg-base-100 rounded-lg p-3">
     <a href="/store/{{ $store->id }}" wire:navigate>
         <div>
             <div class="text-base font-bold">

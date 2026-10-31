@@ -24,6 +24,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sushiro' => [
+        'base_url' => env('CRM_API_URL', 'https://sushipass.sushiro.com.hk/api/2.0'),
+        'region' => env('CRM_API_REGION', 'HK'),
+        'guid' => env('CRM_API_GUID'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

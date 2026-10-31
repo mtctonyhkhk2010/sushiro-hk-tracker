@@ -10,6 +10,38 @@ use MatanYadaev\EloquentSpatial\Objects\Point;
 
 uses(DatabaseTransactions::class);
 
+it('refreshes store statuses and queue numbers when the tracker polls', function (bool $isPinned) {
+    $store = Store::create([
+        'sushiro_store_id' => 900004,
+        'name' => ['zh_HK' => '測試狀態店'],
+        'status' => StoreStatus::Closed,
+        'address' => 'Test address',
+        'region' => '測試區',
+        'location' => new Point(22.3, 114.17),
+        'store_queue' => [],
+        'wait_group' => 0,
+        'wait_time' => 0,
+    ]);
+
+    session()->put('liked_stores', $isPinned ? [$store->id] : []);
+
+    $tracker = Livewire::test(Tracker::class)->assertSee('檔已收');
+
+    $store->update([
+        'status' => StoreStatus::Open,
+        'local_ticketing_status' => true,
+        'store_queue' => ['TEST-123'],
+        'wait_group' => 123456,
+    ]);
+
+    $tracker->call('$refresh')
+        ->assertSee('123456組人等緊')
+        ->assertSee('TEST-123');
+})->with([
+    'regular store' => false,
+    'pinned store' => true,
+]);
+
 it('sorts region groups and their stores by distance', function () {
     $nearRegion = '測試近區';
     $farRegion = '測試遠區';
