@@ -56,6 +56,7 @@ it('refreshes queues and waiting statistics using the CRM endpoints', function (
     );
     Http::assertSent(fn (Request $request): bool => $request->method() === 'GET'
         && $request->url() === 'https://crm.example.test/api/2.0/remote/groupqueues?storeid=900001&region=HK'
+        && $request->hasHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36')
     );
 
     $this->artisan('app:get-stores-group-queues')->assertSuccessful();
@@ -123,12 +124,42 @@ it('skips stores missing from the directory', function () {
 
     Http::fake([
         'crm.example.test/api/2.0/info/storelist*' => Http::response([]),
-        'crm.example.test/api/2.0/remote/groupqueues*' => Http::response(['mixedQueue' => ['006']]),
     ]);
 
     $this->artisan('app:get-stores-group-queues')->assertSuccessful();
 
     expect($store->fresh()->store_queue)->toBe(['001']);
+    Http::assertSentCount(1);
+});
+
+it('clears a closed store queue and resumes fetching it after reopening', function () {
+    $store = createSushiroTestStore(900001);
+    $openStore = sushiroStorePayload(900001);
+    $closedStore = array_replace($openStore, [
+        'storeStatus' => 'CLOSED',
+        'waitingGroup' => 0,
+        'wait' => 0,
+        'localTicketingStatus' => 'OFF',
+    ]);
+
+    Http::fake([
+        'crm.example.test/api/2.0/info/storelist*' => Http::sequence()->push([$closedStore])->push([$openStore]),
+        'crm.example.test/api/2.0/remote/groupqueues?storeid=900001&region=HK' => Http::response(['mixedQueue' => ['006']]),
+    ]);
+
+    $this->artisan('app:get-stores-group-queues')->assertSuccessful();
+
+    $store->refresh();
+    expect($store->status)->toBe(StoreStatus::Closed)
+        ->and($store->store_queue)->toBe([]);
+    Http::assertSentCount(1);
+
+    $this->artisan('app:get-stores-group-queues')->assertSuccessful();
+
+    $store->refresh();
+    expect($store->status)->toBe(StoreStatus::Open)
+        ->and($store->store_queue)->toBe(['006']);
+    Http::assertSentCount(3);
 });
 
 it('syncs new and removed stores using their remote IDs', function () {

@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\StoreStatus;
 use App\Models\Record;
 use App\Models\Statistic;
 use App\Models\Store;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\Pool;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -42,37 +44,41 @@ class getStoresGroupQueues extends Command
             return self::FAILURE;
         }
 
-        $store_response = $store_response->collect();
+        $store_directory = $store_response->collect()
+            ->whereIn('storeStatus', [StoreStatus::Open->value, StoreStatus::Closed->value])
+            ->keyBy('id');
 
-        $stores = Store::all();
+        $stores = Store::query()->whereIn('sushiro_store_id', $store_directory->keys())->get();
+        $open_stores = $stores->filter(fn (Store $store): bool => $store_directory[$store->sushiro_store_id]['storeStatus'] === StoreStatus::Open->value
+        );
 
-        $responses = Http::pool(function (Pool $pool) use ($stores, $base_url, $region): void {
-            foreach ($stores as $store) {
-                $pool->as($store->sushiro_store_id)->get($base_url.'/remote/groupqueues', [
-                    'storeid' => $store->sushiro_store_id,
-                    'region' => $region,
-                ]);
+        $responses = $open_stores->isEmpty() ? [] : Http::pool(function (Pool $pool) use ($open_stores, $base_url, $region): void {
+            foreach ($open_stores as $store) {
+                $pool->as($store->sushiro_store_id)
+                    ->withUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36')
+                    ->get($base_url.'/remote/groupqueues', [
+                        'storeid' => $store->sushiro_store_id,
+                        'region' => $region,
+                    ]);
             }
         });
 
-        foreach ($responses as $store_id => $response) {
-            if ($response instanceof \Throwable || $response->failed() || ! is_array($response->json('mixedQueue'))) {
-                continue;
-            }
+        foreach ($stores as $store) {
+            $target_store = $store_directory[$store->sushiro_store_id];
+            $store_queue = [];
 
-            $response = $response->collect();
+            if ($target_store['storeStatus'] === StoreStatus::Open->value) {
+                $response = $responses[$store->sushiro_store_id] ?? null;
+                if (! $response instanceof Response || $response->failed() || ! is_array($response->json('mixedQueue'))) {
+                    continue;
+                }
 
-            $store = $stores->where('sushiro_store_id', $store_id)->first();
-
-            $target_store = $store_response->firstWhere('id', $store->sushiro_store_id);
-
-            if ($target_store === null) {
-                continue;
+                $store_queue = $response->json('mixedQueue');
             }
 
             $store->update([
                 'status' => $target_store['storeStatus'],
-                'store_queue' => $response['mixedQueue'],
+                'store_queue' => $store_queue,
                 'wait_group' => $target_store['waitingGroup'],
                 'wait_time' => $target_store['wait'],
                 'local_ticketing_status' => $target_store['localTicketingStatus'] === 'ON',
