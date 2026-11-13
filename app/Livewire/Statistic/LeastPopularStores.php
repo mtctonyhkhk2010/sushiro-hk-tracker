@@ -30,7 +30,7 @@ class LeastPopularStores extends Component
         $today = now()->toImmutable()->startOfDay();
         $cacheKey = 'statistics:least-popular-stores:'.$today->toDateString().':'.implode(',', $hours);
 
-        return Cache::remember($cacheKey, $today->addDay(), fn (): Collection => Store::addSelect([
+        return Cache::remember($cacheKey, $today->addDay(), fn (): Collection => Store::query()->select(['stores.id', 'stores.name'])->addSelect([
             't_wait_group' => Record::select(DB::raw('SUM(wait_group) as t_wait_group'))
                 ->whereColumn('store_id', 'stores.id')
                 ->whereBetween('created_at', [$today->subDays(15), $today->subDay()->endOfDay()])

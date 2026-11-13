@@ -12,6 +12,8 @@ it('uses an indexable date range for statistic rankings', function (string $comp
     expect($queries)->toHaveCount(1)
         ->and($queries[0]['query'])
         ->toContain('`created_at` between ')
+        ->toContain('select `stores`.`id`, `stores`.`name`,')
+        ->not->toContain('`stores`.*')
         ->not->toContain('DATE(');
 })->with([
     'most popular stores' => [MostPopularStores::class, 'most_popular_stores'],
