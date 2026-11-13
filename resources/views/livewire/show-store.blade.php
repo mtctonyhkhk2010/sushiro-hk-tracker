@@ -44,7 +44,7 @@
                     <x-badge value="無人排隊" class="badge-accent" />
                 @endforelse
             @else
-                <x-badge value="檔已收" class="badge-accent" />
+                <x-badge value="檔已收" class="badge-soft" />
             @endif
         </div>
     </x-card>
